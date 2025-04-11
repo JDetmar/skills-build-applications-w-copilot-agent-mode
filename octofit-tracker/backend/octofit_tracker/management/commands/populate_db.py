@@ -4,6 +4,7 @@ from django.conf import settings
 from pymongo import MongoClient
 from datetime import timedelta
 from bson import ObjectId
+from octofit_tracker.test_data import test_users, test_teams, test_activities, test_leaderboard, test_workouts
 
 class Command(BaseCommand):
     help = 'Populate the database with test data for users, teams, activity, leaderboard, and workouts'
@@ -65,5 +66,12 @@ class Command(BaseCommand):
             Workout(_id=ObjectId(), name='Swimming Training', description='Training for a swimming competition'),
         ]
         Workout.objects.bulk_create(workouts)
+
+        # Insert test data into collections
+        db.users.insert_many(test_users)
+        db.teams.insert_many(test_teams)
+        db.activity.insert_many(test_activities)
+        db.leaderboard.insert_many(test_leaderboard)
+        db.workouts.insert_many(test_workouts)
 
         self.stdout.write(self.style.SUCCESS('Successfully populated the database with test data.'))
